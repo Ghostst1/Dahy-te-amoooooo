@@ -1,0 +1,1610 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Para ti, mi persona favorita ✨</title>
+
+  <!-- Fuentes editoriales y modernas desde Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream: '#FFF9F5',
+            blush: '#F9E6EA',
+            rosePrimary: '#B84A62',
+            roseDark: '#7A2E41',
+            goldAccent: '#D4A373',
+            slateInk: '#2B1E22',
+            slateMuted: '#6E5A60',
+            paper: '#FFFDFB',
+          },
+          fontFamily: {
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+          },
+          boxShadow: {
+            soft: '0 10px 30px -10px rgba(184, 74, 98, 0.16)',
+            card: '0 4px 20px -2px rgba(122, 46, 65, 0.07)',
+            letter: '0 25px 50px -12px rgba(43, 30, 34, 0.28)',
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    /* Estilos base y textura editorial suave */
+    body {
+      background-color: #FFF9F5;
+      color: #2B1E22;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow-x: hidden;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Fondo ambiental sutil con tonos palo de rosa y dorado cálido */
+    .ambient-backdrop {
+      background-image:
+        radial-gradient(circle at 15% 10%, rgba(249, 230, 234, 0.85) 0%, transparent 45%),
+        radial-gradient(circle at 85% 35%, rgba(212, 163, 115, 0.18) 0%, transparent 42%),
+        radial-gradient(circle at 20% 82%, rgba(249, 230, 234, 0.75) 0%, transparent 45%);
+    }
+
+    /* Animación de corazones flotantes en el Hero */
+    @keyframes floatUp {
+      0% {
+        transform: translateY(20px) scale(0.85) rotate(0deg);
+        opacity: 0;
+      }
+      20% {
+        opacity: 0.55;
+      }
+      80% {
+        opacity: 0.4;
+      }
+      100% {
+        transform: translateY(-220px) scale(1.1) rotate(12deg);
+        opacity: 0;
+      }
+    }
+
+    .floating-heart {
+      position: absolute;
+      bottom: -10px;
+      pointer-events: none;
+      animation: floatUp linear infinite;
+    }
+
+    /* Rotación suave del disco de vinilo */
+    @keyframes spinVinyl {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .vinyl-disc {
+      animation: spinVinyl 7s linear infinite;
+      animation-play-state: paused;
+    }
+
+    .vinyl-disc.is-playing {
+      animation-play-state: running;
+    }
+
+    /* Textura sutil de papel de carta dentro del modal */
+    .letter-paper {
+      background-color: #FFFDFB;
+      background-image: linear-gradient(to bottom, rgba(184, 74, 98, 0.05) 1px, transparent 1px);
+      background-size: 100% 2rem;
+    }
+
+    /* Detalle decorativo tipo solapa de sobre en las tarjetas */
+    .envelope-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #B84A62, #D4A373, #7A2E41);
+      opacity: 0.85;
+    }
+
+    /* Animación de aparición para la tarjeta de cita ganadora */
+    @keyframes revealWinner {
+      0% {
+        opacity: 0;
+        transform: translateY(10px) scale(0.97);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .winner-card-reveal {
+      animation: revealWinner 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    /* Partículas de celebración al detenerse la ruleta */
+    @keyframes confettiBurst {
+      0% {
+        transform: translate(0, 0) scale(1) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(var(--tx), var(--ty)) scale(0.4) rotate(var(--rot));
+        opacity: 0;
+      }
+    }
+
+    .burst-particle {
+      position: fixed;
+      pointer-events: none;
+      z-index: 100;
+      animation: confettiBurst 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* Accesibilidad: reducir movimiento si el sistema lo prefiere */
+    @media (prefers-reduced-motion: reduce) {
+      .floating-heart,
+      .vinyl-disc {
+        animation: none !important;
+      }
+    }
+  </style>
+</head>
+<body class="ambient-backdrop min-h-screen antialiased selection:bg-blush selection:text-rosePrimary">
+
+  <!-- Contenedor principal centrado estilo tarjeta móvil nativa -->
+  <main class="mx-auto w-full max-w-md sm:max-w-lg px-4 pt-6 pb-28 sm:py-10">
+    <div class="space-y-8">
+
+      <!-- =========================================================
+           1. SECCIÓN HERO (Portada Romántica con Partículas)
+      ========================================================== -->
+      <header class="relative overflow-hidden rounded-3xl bg-gradient-to-b from-white via-white to-blush/55 border border-goldAccent/35 px-6 pt-10 pb-9 text-center shadow-soft">
+        <!-- Contenedor de corazones flotantes generados por JS -->
+        <div id="hero-hearts-container" aria-hidden="true" class="absolute inset-0 overflow-hidden pointer-events-none"></div>
+
+        <!-- Insignia editable con los nombres de la pareja -->
+        <div class="relative z-10 inline-flex items-center gap-2 rounded-full bg-blush/90 border border-goldAccent/45 px-4 py-1.5 text-xs font-semibold tracking-wide text-roseDark shadow-sm mb-5">
+          <span class="inline-block h-2 w-2 rounded-full bg-rosePrimary animate-pulse"></span>
+          <strong id="display-couple-names" class="font-bold">Tú &amp; Yo</strong>
+        </div>
+
+        <!-- Título editorial principal editable -->
+        <h1 id="display-hero-title" class="relative z-10 font-serif text-3xl sm:text-4xl font-bold leading-tight text-slateInk tracking-tight">
+          Para ti, <span class="italic font-semibold text-rosePrimary">mi amor</span>
+        </h1>
+
+        <!-- Separador ornamental dorado -->
+        <div class="relative z-10 my-4 flex items-center justify-center gap-3 text-goldAccent">
+          <span class="h-px w-12 bg-goldAccent/50"></span>
+          <svg class="h-4 w-4 fill-rosePrimary" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+          </svg>
+          <span class="h-px w-12 bg-goldAccent/50"></span>
+        </div>
+
+        <!-- Subtítulo cálido sobre el amor a distancia -->
+        <p class="relative z-10 mx-auto max-w-sm text-sm sm:text-base leading-relaxed text-slateMuted">
+          Aunque hoy nos separen kilómetros, cada latido, cada mensaje y cada pensamiento mío viajan directo hasta donde estás tú. Este pequeño rincón es solo para recordarte cuánto te amo.
+        </p>
+      </header>
+
+      <!-- =========================================================
+           2. CONTADOR EN VIVO ("Nuestro tiempo juntos")
+      ========================================================== -->
+      <section aria-labelledby="counter-heading" class="rounded-3xl bg-white/95 border border-goldAccent/30 p-6 shadow-card">
+        <div class="text-center mb-4">
+          <span class="text-[11px] font-bold uppercase tracking-widest text-goldAccent">Cada segundo cuenta</span>
+          <h2 id="counter-heading" class="font-serif text-2xl font-semibold text-slateInk mt-0.5">
+            Nuestro tiempo juntos
+          </h2>
+        </div>
+
+        <!-- Cuadrícula de Días, Horas, Minutos y Segundos -->
+        <div class="grid grid-cols-4 gap-2 sm:gap-3 text-center">
+          <div class="rounded-2xl bg-cream border border-goldAccent/25 py-3 px-1">
+            <span id="count-days" class="block font-serif text-2xl sm:text-3xl font-bold text-rosePrimary tabular-nums">0</span>
+            <span class="mt-1 block text-[11px] font-medium uppercase tracking-wider text-slateMuted">Días</span>
+          </div>
+          <div class="rounded-2xl bg-cream border border-goldAccent/25 py-3 px-1">
+            <span id="count-hours" class="block font-serif text-2xl sm:text-3xl font-bold text-roseDark tabular-nums">00</span>
+            <span class="mt-1 block text-[11px] font-medium uppercase tracking-wider text-slateMuted">Horas</span>
+          </div>
+          <div class="rounded-2xl bg-cream border border-goldAccent/25 py-3 px-1">
+            <span id="count-minutes" class="block font-serif text-2xl sm:text-3xl font-bold text-roseDark tabular-nums">00</span>
+            <span class="mt-1 block text-[11px] font-medium uppercase tracking-wider text-slateMuted">Minutos</span>
+          </div>
+          <div class="rounded-2xl bg-blush/70 border border-rosePrimary/25 py-3 px-1">
+            <span id="count-seconds" class="block font-serif text-2xl sm:text-3xl font-bold text-rosePrimary tabular-nums">00</span>
+            <span class="mt-1 block text-[11px] font-medium uppercase tracking-wider text-roseDark">Segundos</span>
+          </div>
+        </div>
+
+        <p id="display-start-date-label" class="mt-4 text-center text-xs text-slateMuted">
+          Desde el 15 de enero de 2026 — y sumando recuerdos
+        </p>
+      </section>
+
+      <!-- =========================================================
+           3. 6 SOBRES INTERACTIVOS ("Ábrelo cuando...")
+      ========================================================== -->
+      <section aria-labelledby="letters-heading" class="space-y-4">
+        <div class="px-1 text-center">
+          <span class="text-[11px] font-bold uppercase tracking-widest text-goldAccent">Sobres digitales para ti</span>
+          <h2 id="letters-heading" class="font-serif text-2xl font-semibold text-slateInk mt-0.5">
+            Ábrelo cuando...
+          </h2>
+          <p class="text-xs sm:text-sm text-slateMuted mt-1">
+            Toca cualquier sobre cuando necesites sentirme cerca
+          </p>
+        </div>
+
+        <!-- Cuadrícula de 2 columnas con 6 sobres interactivos -->
+        <div id="letters-grid" class="grid grid-cols-2 gap-3.5">
+          <!-- Se renderiza dinámicamente desde JS -->
+        </div>
+      </section>
+
+      <!-- =========================================================
+           4. RULETA DE CITAS A DISTANCIA (HTML5 Canvas Retina)
+      ========================================================== -->
+      <section aria-labelledby="roulette-heading" class="rounded-3xl bg-white/95 border border-goldAccent/35 p-6 shadow-card space-y-5">
+        <div class="text-center">
+          <span class="text-[11px] font-bold uppercase tracking-widest text-goldAccent">Plan improvisado</span>
+          <h2 id="roulette-heading" class="font-serif text-2xl font-semibold text-slateInk mt-0.5">
+            Ruleta de Citas a Distancia
+          </h2>
+          <p class="text-xs sm:text-sm text-slateMuted mt-1 max-w-sm mx-auto leading-relaxed">
+            ¿No sabemos qué hacer hoy? Gira la ruleta y deja que decida nuestra próxima cita
+          </p>
+        </div>
+
+        <!-- Contenedor responsivo de la Ruleta + Puntero Superior + Botón Central -->
+        <div class="relative mx-auto flex flex-col items-center justify-center pt-3 pb-1">
+          <!-- Puntero fijo en la parte superior (12 en punto) -->
+          <div aria-hidden="true" class="relative z-20 -mb-3.5 flex flex-col items-center drop-shadow-md">
+            <div class="h-3.5 w-3.5 rounded-full bg-goldAccent border-2 border-white shadow"></div>
+            <svg class="h-6 w-6 -mt-1.5 text-roseDark fill-current" viewBox="0 0 24 24">
+              <path d="M12 21L4 7h16l-8 14z" />
+            </svg>
+          </div>
+
+          <!-- Lienzo circular de alta nitidez (Retina/DPR) -->
+          <div id="roulette-wrapper" class="relative w-full max-w-[320px] sm:max-w-[350px] aspect-square flex items-center justify-center">
+            <canvas
+              id="roulette-canvas"
+              aria-label="Ruleta interactiva con 8 ideas de citas a distancia"
+              class="block w-full h-full rounded-full shadow-soft"
+            ></canvas>
+
+            <!-- Botón central "¡GIRAR!" -->
+            <button
+              id="spin-roulette-btn"
+              type="button"
+              class="absolute z-20 flex h-20 w-20 sm:h-22 sm:w-22 items-center justify-center rounded-full bg-gradient-to-b from-rosePrimary to-roseDark text-white font-sans text-xs sm:text-sm font-extrabold tracking-wider uppercase shadow-lg ring-4 ring-white border-2 border-goldAccent transition-transform hover:scale-105 active:scale-95 disabled:opacity-80 disabled:cursor-not-allowed"
+            >
+              ¡GIRAR!
+            </button>
+          </div>
+        </div>
+
+        <!-- Tarjeta destacada con la Cita Ganadora (oculta hasta que termine el primer giro) -->
+        <div
+          id="roulette-result-card"
+          class="hidden winner-card-reveal rounded-2xl bg-gradient-to-br from-cream via-white to-blush/60 border border-goldAccent/45 p-5 shadow-soft space-y-3.5"
+        >
+          <div class="flex items-center justify-between gap-2">
+            <span class="inline-flex items-center gap-1.5 rounded-full bg-blush px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-roseDark">
+              <span>✨</span>
+              <span>Cita elegida</span>
+            </span>
+            <button
+              id="spin-again-btn"
+              type="button"
+              class="text-xs font-semibold text-rosePrimary hover:text-roseDark underline underline-offset-2 transition"
+            >
+              Volver a girar
+            </button>
+          </div>
+
+          <div>
+            <h3 id="winner-date-title" class="font-serif text-xl font-bold text-slateInk leading-snug">
+              🎬 Noche de peli / anime
+            </h3>
+            <p id="winner-date-description" class="mt-1.5 text-xs sm:text-sm text-slateMuted leading-relaxed">
+              Elijan una película o maratón de anime, denle play al mismo segundo y coméntenla en vivo por llamada.
+            </p>
+          </div>
+
+          <button
+            id="copy-date-plan-btn"
+            type="button"
+            class="flex w-full items-center justify-center gap-2 rounded-xl bg-roseDark px-4 py-3 text-xs sm:text-sm font-semibold text-white shadow-sm transition hover:bg-rosePrimary active:scale-[0.99]"
+          >
+            <span>💌 Copiar plan para enviártelo</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- =========================================================
+           5. MINI TARJETA "NUESTRA CANCIÓN" (Estilo Vinilo)
+      ========================================================== -->
+      <section aria-labelledby="song-heading" class="rounded-3xl bg-white border border-rosePrimary/15 p-6 shadow-card">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <span class="text-[11px] font-bold uppercase tracking-widest text-rosePrimary/80">Banda sonora</span>
+            <h2 id="song-heading" class="font-serif text-2xl font-semibold text-slateInk">
+              Nuestra Canción
+            </h2>
+          </div>
+          <span id="vinyl-status-pill" class="rounded-full bg-blush/70 px-3 py-1 text-[11px] font-semibold text-rosePrimary">
+            Toca el disco
+          </span>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <!-- Disco de vinilo interactivo con SVG -->
+          <button
+            id="vinyl-toggle-btn"
+            type="button"
+            aria-label="Girar o detener el disco de vinilo"
+            class="group relative flex-shrink-0 h-24 w-24 rounded-full focus:outline-none focus:ring-4 focus:ring-blush transition-transform active:scale-95"
+          >
+            <svg id="vinyl-svg" class="vinyl-disc h-full w-full drop-shadow-md" viewBox="0 0 120 120">
+              <!-- Cuerpo oscuro del vinilo -->
+              <circle cx="60" cy="60" r="58" fill="#1E293B" />
+              <!-- Surcos del disco -->
+              <circle cx="60" cy="60" r="50" fill="none" stroke="#334155" stroke-width="1" />
+              <circle cx="60" cy="60" r="43" fill="none" stroke="#334155" stroke-width="1" />
+              <circle cx="60" cy="60" r="36" fill="none" stroke="#334155" stroke-width="1" />
+              <circle cx="60" cy="60" r="29" fill="none" stroke="#334155" stroke-width="1" />
+              <!-- Reflejo de luz diagonal -->
+              <path d="M22 25 A 50 50 0 0 1 95 22" fill="none" stroke="rgba(255,255,255,0.14)" stroke-width="4" stroke-linecap="round" />
+              <!-- Etiqueta central rosa -->
+              <circle cx="60" cy="60" r="20" fill="#E11D48" />
+              <circle cx="60" cy="60" r="16" fill="none" stroke="#FFE4E6" stroke-width="1" stroke-dasharray="2 2" />
+              <!-- Agujero central -->
+              <circle cx="60" cy="60" r="4.5" fill="#FFF9F5" />
+            </svg>
+            <!-- Indicador de play/pausa en el centro -->
+            <span class="pointer-events-none absolute inset-0 flex items-center justify-center">
+              <span class="h-6 w-6 rounded-full bg-white/90 text-rosePrimary flex items-center justify-center shadow text-[10px] font-bold opacity-0 group-hover:opacity-100 transition-opacity">
+                ♪
+              </span>
+            </span>
+          </button>
+
+          <!-- Información de la canción -->
+          <div class="min-w-0 flex-1">
+            <h3 id="display-song-title" class="truncate font-serif text-lg font-bold text-slateInk">
+              Eres
+            </h3>
+            <p id="display-song-artist" class="truncate text-xs font-medium text-slateMuted">
+              Café Tacvba
+            </p>
+            <blockquote id="display-song-lyric" class="mt-2 border-l-2 border-rosePrimary/40 pl-2.5 font-serif italic text-xs sm:text-sm text-slateInk/90 leading-snug">
+              "Eres lo que más quiero en este mundo, eso eres..."
+            </blockquote>
+          </div>
+        </div>
+
+        <!-- Botón externo para escuchar la canción -->
+        <div class="mt-5">
+          <a
+            id="display-song-link"
+            href="https://open.spotify.com/search/Eres%20Cafe%20Tacvba"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex w-full items-center justify-center gap-2 rounded-2xl bg-rosePrimary px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-roseDark active:scale-[0.99]"
+          >
+            <svg class="h-4 w-4 fill-current" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+            </svg>
+            <span>Escuchar nuestra canción</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- Pie de página romántico -->
+      <footer class="pt-2 pb-4 text-center text-xs text-slateMuted">
+        <p>Hecho con todo mi amor para ti, <span id="footer-couple-names" class="font-semibold text-rosePrimary">Tú &amp; Yo</span> ♥</p>
+      </footer>
+    </div>
+  </main>
+
+  <!-- =========================================================
+       BOTÓN FLOTANTE DISCRETO: "⚙️ Personalizar"
+  ========================================================== -->
+  <button
+    id="open-customizer-btn"
+    type="button"
+    aria-label="Personalizar esta página"
+    class="fixed bottom-4 right-4 z-40 inline-flex items-center gap-1.5 rounded-full bg-white/90 backdrop-blur-md border border-slateInk/10 px-3.5 py-2.5 text-xs font-semibold text-slateInk shadow-lg transition hover:border-rosePrimary/40 hover:text-rosePrimary active:scale-95"
+  >
+    <span aria-hidden="true">⚙️</span>
+    <span>Personalizar</span>
+  </button>
+
+  <!-- =========================================================
+       MODAL DE CARTA ("Ábrelo cuando...")
+  ========================================================== -->
+  <div
+    id="letter-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modal-letter-title"
+    class="fixed inset-0 z-50 hidden items-center justify-center bg-slateInk/50 backdrop-blur-xs p-4 transition-opacity"
+  >
+    <div class="letter-paper relative w-full max-w-md rounded-3xl border border-rosePrimary/20 p-6 sm:p-8 shadow-letter transform transition-all">
+      <!-- Sello de lacre decorativo superior -->
+      <div class="mx-auto -mt-11 mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-rosePrimary text-white shadow-md ring-4 ring-white">
+        <svg class="h-7 w-7 fill-current" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </svg>
+      </div>
+
+      <p class="text-center text-[11px] font-bold uppercase tracking-widest text-rosePrimary">
+        Ábrelo cuando...
+      </p>
+      <h3 id="modal-letter-title" class="mt-1 text-center font-serif text-2xl font-bold text-slateInk">
+        Título de la carta
+      </h3>
+
+      <!-- Cuerpo de la carta -->
+      <div class="mt-5 max-h-[52vh] overflow-y-auto pr-1">
+        <p id="modal-letter-body" class="whitespace-pre-line text-sm sm:text-base leading-relaxed text-slateInk/90">
+          Contenido de la carta...
+        </p>
+        <p class="mt-6 text-right font-serif italic text-base text-rosePrimary">
+          Con todo mi amor, <span id="modal-sender-name">Quien más te quiere</span>
+        </p>
+      </div>
+
+      <!-- Botón para cerrar la carta -->
+      <div class="mt-6">
+        <button
+          id="close-letter-btn"
+          type="button"
+          class="w-full rounded-2xl bg-blush/80 py-3 text-sm font-semibold text-rosePrimary transition hover:bg-blush active:scale-[0.99]"
+        >
+          Cerrar carta
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       DRAWER / MODAL DE PERSONALIZACIÓN ("⚙️ Personalizar")
+  ========================================================== -->
+  <div
+    id="customizer-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="customizer-title"
+    class="fixed inset-0 z-50 hidden items-end sm:items-center justify-center bg-slateInk/50 backdrop-blur-xs sm:p-4"
+  >
+    <div class="flex max-h-[90vh] w-full max-w-lg flex-col rounded-t-3xl sm:rounded-3xl bg-white shadow-2xl border border-rosePrimary/15 overflow-hidden">
+      <!-- Encabezado fijo del panel -->
+      <div class="flex items-center justify-between border-b border-slateInk/10 bg-cream px-6 py-4">
+        <div>
+          <h3 id="customizer-title" class="font-serif text-xl font-bold text-slateInk">
+            Personalizar regalo
+          </h3>
+          <p class="text-xs text-slateMuted">Edita los textos y guarda tu versión</p>
+        </div>
+        <button
+          id="close-customizer-btn"
+          type="button"
+          aria-label="Cerrar panel de personalización"
+          class="flex h-9 w-9 items-center justify-center rounded-full bg-white text-slateMuted hover:text-slateInk border border-slateInk/10"
+        >
+          ✕
+        </button>
+      </div>
+
+      <!-- Formulario desplazable -->
+      <form id="customizer-form" class="flex-1 overflow-y-auto p-6 space-y-5 text-sm">
+        <!-- Nombres y Fecha/Hora -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label for="input-couple-names" class="block text-xs font-semibold text-slateInk mb-1">
+              Nombre de la pareja
+            </label>
+            <input
+              id="input-couple-names"
+              type="text"
+              required
+              placeholder="Ej. Tú & Yo"
+              class="w-full rounded-xl border border-slateInk/15 bg-cream/60 px-3.5 py-2.5 text-slateInk focus:border-rosePrimary focus:bg-white focus:outline-none"
+            />
+          </div>
+          <div>
+            <label for="input-hero-title" class="block text-xs font-semibold text-slateInk mb-1">
+              Título de portada
+            </label>
+            <input
+              id="input-hero-title"
+              type="text"
+              required
+              placeholder="Ej. Para ti, mi amor"
+              class="w-full rounded-xl border border-slateInk/15 bg-cream/60 px-3.5 py-2.5 text-slateInk focus:border-rosePrimary focus:bg-white focus:outline-none"
+            />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label for="input-sender-name" class="block text-xs font-semibold text-slateInk mb-1">
+              Tu firma en las cartas
+            </label>
+            <input
+              id="input-sender-name"
+              type="text"
+              required
+              placeholder="Ej. Quien más te quiere"
+              class="w-full rounded-xl border border-slateInk/15 bg-cream/60 px-3.5 py-2.5 text-slateInk focus:border-rosePrimary focus:bg-white focus:outline-none"
+            />
+          </div>
+          <div>
+            <label for="input-start-datetime" class="block text-xs font-semibold text-slateInk mb-1">
+              Fecha y hora de inicio
+            </label>
+            <input
+              id="input-start-datetime"
+              type="datetime-local"
+              required
+              class="w-full rounded-xl border border-slateInk/15 bg-cream/60 px-3.5 py-2.5 text-slateInk focus:border-rosePrimary focus:bg-white focus:outline-none"
+            />
+          </div>
+        </div>
+
+        <!-- Sección Nuestra Canción -->
+        <div class="rounded-2xl bg-cream/80 border border-goldAccent/30 p-4 space-y-3">
+          <p class="text-xs font-bold uppercase tracking-wider text-rosePrimary">Nuestra Canción</p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label for="input-song-title" class="block text-xs font-semibold text-slateInk mb-1">Título</label>
+              <input
+                id="input-song-title"
+                type="text"
+                class="w-full rounded-xl border border-slateInk/15 bg-white px-3 py-2 text-slateInk focus:border-rosePrimary focus:outline-none"
+              />
+            </div>
+            <div>
+              <label for="input-song-artist" class="block text-xs font-semibold text-slateInk mb-1">Artista</label>
+              <input
+                id="input-song-artist"
+                type="text"
+                class="w-full rounded-xl border border-slateInk/15 bg-white px-3 py-2 text-slateInk focus:border-rosePrimary focus:outline-none"
+              />
+            </div>
+          </div>
+          <div>
+            <label for="input-song-lyric" class="block text-xs font-semibold text-slateInk mb-1">Frase favorita de la letra</label>
+            <input
+              id="input-song-lyric"
+              type="text"
+              class="w-full rounded-xl border border-slateInk/15 bg-white px-3 py-2 text-slateInk focus:border-rosePrimary focus:outline-none"
+            />
+          </div>
+          <div>
+            <label for="input-song-url" class="block text-xs font-semibold text-slateInk mb-1">Enlace (Spotify / YouTube)</label>
+            <input
+              id="input-song-url"
+              type="url"
+              placeholder="https://open.spotify.com/..."
+              class="w-full rounded-xl border border-slateInk/15 bg-white px-3 py-2 text-slateInk focus:border-rosePrimary focus:outline-none"
+            />
+          </div>
+        </div>
+
+        <!-- Editor de las 8 opciones de la Ruleta de Citas -->
+        <div class="rounded-2xl bg-cream/80 border border-goldAccent/30 p-4 space-y-3">
+          <p class="text-xs font-bold uppercase tracking-wider text-rosePrimary">Opciones de la Ruleta de Citas (8)</p>
+          <div id="roulette-inputs-container" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <!-- Generado dinámicamente por JS -->
+          </div>
+        </div>
+
+        <!-- Editor de las 6 cartas "Ábrelo cuando..." -->
+        <div class="rounded-2xl bg-cream/80 border border-goldAccent/30 p-4 space-y-3">
+          <div class="flex items-center justify-between">
+            <p class="text-xs font-bold uppercase tracking-wider text-rosePrimary">Editar mensajes de cartas</p>
+          </div>
+          <div>
+            <label for="select-letter-edit" class="block text-xs font-semibold text-slateInk mb-1">
+              Elige qué carta editar:
+            </label>
+            <select
+              id="select-letter-edit"
+              class="w-full rounded-xl border border-slateInk/15 bg-white px-3 py-2.5 text-slateInk focus:border-rosePrimary focus:outline-none"
+            >
+              <!-- Opciones cargadas por JS -->
+            </select>
+          </div>
+          <div>
+            <label for="textarea-letter-edit" class="block text-xs font-semibold text-slateInk mb-1">
+              Mensaje de la carta seleccionada:
+            </label>
+            <textarea
+              id="textarea-letter-edit"
+              rows="4"
+              class="w-full rounded-xl border border-slateInk/15 bg-white p-3 text-slateInk leading-relaxed focus:border-rosePrimary focus:outline-none"
+            ></textarea>
+          </div>
+        </div>
+
+        <!-- Utilidad para compartir enlace personalizado -->
+        <div class="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-slateInk/10">
+          <button
+            id="copy-share-link-btn"
+            type="button"
+            class="inline-flex items-center gap-1.5 rounded-xl bg-blush px-4 py-2.5 text-xs font-semibold text-roseDark hover:bg-rosePrimary hover:text-white transition"
+          >
+            <span>🔗 Copiar enlace personalizado</span>
+          </button>
+        </div>
+      </form>
+
+      <!-- Pie fijo con botón de guardar -->
+      <div class="border-t border-slateInk/10 bg-cream px-6 py-4 flex items-center gap-3">
+        <button
+          id="restore-defaults-btn"
+          type="button"
+          class="rounded-2xl border border-slateInk/15 bg-white px-4 py-3 text-xs font-semibold text-slateMuted hover:text-slateInk transition"
+        >
+          Restaurar
+        </button>
+        <button
+          id="save-customizer-btn"
+          type="submit"
+          form="customizer-form"
+          class="flex-1 rounded-2xl bg-rosePrimary px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-roseDark transition active:scale-[0.99]"
+        >
+          Guardar cambios
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       TOAST / NOTIFICACIÓN FLOTANTE (Reemplaza cualquier alert())
+  ========================================================== -->
+  <div
+    id="toast-banner"
+    role="status"
+    aria-live="polite"
+    class="pointer-events-none fixed top-5 left-1/2 z-50 -translate-x-1/2 -translate-y-4 opacity-0 transition-all duration-300"
+  >
+    <div class="rounded-full bg-slateInk px-5 py-2.5 text-xs font-semibold text-white shadow-xl flex items-center gap-2">
+      <span class="text-rosePrimary">♥</span>
+      <span id="toast-message">Guardado con éxito</span>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       LÓGICA JAVASCRIPT DE LA MINI PÁGINA ROMÁNTICA
+  ========================================================== -->
+  <script>
+    (function () {
+      'use strict';
+
+      // Claves de almacenamiento local
+      const STORAGE_KEY = 'romantic_ldr_config_v2';
+      const READ_LETTERS_KEY = 'romantic_ldr_read_letters_v2';
+
+      // Descripciones sugeridas para las citas de la ruleta
+      const DEFAULT_DATE_IDEAS = {
+        '🎬 Noche de peli / anime':
+          'Elijan una película o unos capítulos de anime, denle play al mismo segundo y coméntenla en vivo como si compartieran sillón.',
+        '🎮 Jugar algo juntos':
+          'Entren a su juego cooperativo favorito o prueben uno nuevo en línea para trabajar en equipo y reírse un buen rato.',
+        '🍝 Cenar lo mismo en llamada':
+          'Pidan o preparen el mismo platillo favorito, enciendan la cámara y compartan una cena romántica a la luz de la pantalla.',
+        '💬 Preguntas profundas':
+          'Preparen su bebida favorita y túrnense para hacerse preguntas sobre sueños, recuerdos y planes futuros juntos.',
+        '🎨 Reto de dibujo':
+          'Elijan un tutorial rápido o dibújense el uno al otro en 10 minutos sin mirar el papel; al final muestran sus obras maestras.',
+        '🗺️ Viajar por Street View':
+          'Abran Google Street View y caminen virtualmente por las calles de la ciudad a la que sueñan viajar juntos.',
+        '🎶 Armar playlist juntos':
+          'Creen una lista compartida y vayan agregando canciones que les recuerden al otro explicando por qué eligieron cada una.',
+        '🃏 Trivia o juego online':
+          'Jueguen una partida de preguntas, adivinanzas o juegos de mesa virtuales para ver quién gana la revancha.',
+      };
+
+      // Configuración predeterminada en español
+      const DEFAULT_CONFIG = {
+        coupleNames: 'Tú & Yo',
+        heroTitle: 'Para ti, mi amor',
+        senderName: 'Quien más te quiere',
+        startDateTime: '2026-01-15T20:00',
+        songTitle: 'Eres',
+        songArtist: 'Café Tacvba',
+        songLyric: '"Eres lo que más quiero en este mundo, eso eres..."',
+        songUrl: 'https://open.spotify.com/search/Eres%20Cafe%20Tacvba',
+        rouletteOptions: [
+          '🎬 Noche de peli / anime',
+          '🎮 Jugar algo juntos',
+          '🍝 Cenar lo mismo en llamada',
+          '💬 Preguntas profundas',
+          '🎨 Reto de dibujo',
+          '🗺️ Viajar por Street View',
+          '🎶 Armar playlist juntos',
+          '🃏 Trivia o juego online',
+        ],
+        letters: [
+          {
+            id: 'miss',
+            title: 'Ábrelo cuando me extrañes',
+            tag: 'Abrazos a la distancia',
+            icon: 'heart',
+            message:
+              'Si abriste esta carta es porque hoy la distancia pesa un poquito más. Cierra los ojos un segundo e imagina que te tomo de la mano.\n\nNo importa cuántos kilómetros haya en el mapa: miras el mismo cielo que yo y vives en cada uno de mis pensamientos. Falta un día menos para volver a abrazarnos fuerte.',
+          },
+          {
+            id: 'badday',
+            title: 'Ábrelo cuando tengas un mal día',
+            tag: 'Ánimo y calma',
+            icon: 'sun',
+            message:
+              'Respira hondo, mi vida. Sé que hoy las cosas no salieron como esperabas y que estás cansado/a, pero quiero recordarte lo increíble y capaz que eres.\n\nNo tienes que cargar con todo en silencio: escríbeme o llámame cuando quieras. Aquí tienes a tu fan número uno siempre de tu lado.',
+          },
+          {
+            id: 'cantsleep',
+            title: 'Ábrelo cuando no puedas dormir',
+            tag: 'Buenas noches',
+            icon: 'moon',
+            message:
+              'Si el sueño no llega y tu mente da mil vueltas, deja el teléfono a un lado después de leer esto y acomoda tu almohada.\n\nImagina que te hago cariñitos en el pelo hasta que te quedes profundamente dormido/a. Descansa tranquilo/a, mañana será un gran día y yo sigo aquí cuidándote desde lejos.',
+          },
+          {
+            id: 'laugh',
+            title: 'Ábrelo cuando necesites reírte',
+            tag: 'Sonrisas garantizadas',
+            icon: 'sparkle',
+            message:
+              'Acuérdate de nuestras videollamadas con caras raras, de las veces que nos reímos hasta que nos duele el estómago por cualquier tontería y de todas nuestras bromas internas.\n\nTu risa es mi sonido favorito en el universo entero. ¡Sonríe ahora mismo, que seguro te ves hermoso/a!',
+          },
+          {
+            id: 'doubtself',
+            title: 'Ábrelo cuando dudes de ti',
+            tag: 'Confianza plena',
+            icon: 'plane',
+            message:
+              'Cuando sientas que no puedes con algo o que las dudas aparecen, mírate con mis ojos por un instante. Veo a una persona valiente, brillante y con un corazón enorme.\n\nHas superado días difíciles antes y vas a lograr todo lo que te propongas. Yo creo en ti con los ojos cerrados.',
+          },
+          {
+            id: 'whylove',
+            title: 'Ábrelo cuando quieras recordar por qué te amo',
+            tag: 'Promesa sincera',
+            icon: 'infinity',
+            message:
+              'Te amo por tu forma de mirar el mundo, por tu risa contagiosa, por la calma que me das incluso a través de una pantalla y por hacerme sentir en casa sin importar dónde estemos.\n\nTe elijo hoy, mañana y cada día. Eres mi persona favorita en todo el universo.',
+          },
+        ],
+      };
+
+      // Paleta alternada de 8 gajos para la ruleta (rosa pastel, crema, terracota suave, dorado claro)
+      const WHEEL_SLICE_COLORS = [
+        '#F6D6DE', // Rosa pastel
+        '#FFF9F5', // Crema
+        '#E8B4A8', // Terracota suave
+        '#F3DFC1', // Dorado claro
+        '#F6D6DE', // Rosa pastel
+        '#FFF9F5', // Crema
+        '#E8B4A8', // Terracota suave
+        '#F3DFC1', // Dorado claro
+      ];
+
+      // Iconos SVG minimalistas para las 6 cartas
+      const LETTER_ICONS = {
+        heart:
+          '<path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>',
+        sun:
+          '<path d="M12 7a5 5 0 100 10 5 5 0 000-10zm0-5a1 1 0 011 1v2a1 1 0 11-2 0V3a1 1 0 011-1zm0 17a1 1 0 011 1v2a1 1 0 11-2 0v-2a1 1 0 011-1zm9-8a1 1 0 01-1 1h-2a1 1 0 110-2h2a1 1 0 011 1zM6 12a1 1 0 01-1 1H3a1 1 0 110-2h2a1 1 0 011 1zm12.36-6.36a1 1 0 010 1.41l-1.41 1.42a1 1 0 11-1.42-1.42l1.42-1.41a1 1 0 011.41 0zM8.46 16.95a1 1 0 010 1.41l-1.41 1.42a1 1 0 11-1.42-1.42l1.42-1.41a1 1 0 011.41 0zm9.9 1.41a1 1 0 01-1.41 0l-1.42-1.41a1 1 0 111.42-1.42l1.41 1.42a1 1 0 010 1.41zM8.46 7.05a1 1 0 01-1.41 0L5.64 5.64A1 1 0 117.05 4.22l1.41 1.42a1 1 0 010 1.41z"/>',
+        moon:
+          '<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>',
+        sparkle:
+          '<path d="M12 2l2.09 6.26L20 10.27l-5.91 2.01L12 18.54l-2.09-6.26L4 10.27l5.91-2.01L12 2zm7 13l1.05 3.13L23 19.18l-2.95 1.05L19 23.36l-1.05-3.13L15 19.18l2.95-1.05L19 15z"/>',
+        plane:
+          '<path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>',
+        infinity:
+          '<path d="M18.6 6.62c-1.44 0-2.8.56-3.77 1.53L12 10.66 10.48 12h.01L7.8 14.39c-.64.64-1.49.99-2.4.99-1.87 0-3.39-1.51-3.39-3.38S3.53 8.62 5.4 8.62c.91 0 1.76.35 2.44 1.03l1.13 1 1.51-1.34L9.22 8.2A5.37 5.37 0 005.4 6.62C2.42 6.62 0 9.04 0 12s2.42 5.38 5.4 5.38c1.44 0 2.8-.56 3.77-1.53l2.83-2.5.01.01L13.52 12h-.01l2.69-2.39c.64-.64 1.49-.99 2.4-.99 1.87 0 3.39 1.51 3.39 3.38s-1.52 3.38-3.39 3.38c-.9 0-1.76-.35-2.44-1.03l-1.14-1.01-1.51 1.34 1.27 1.12a5.386 5.386 0 003.82 1.57c2.98 0 5.4-2.41 5.4-5.38s-2.42-5.37-5.4-5.37z"/>',
+      };
+
+      // Estado activo de la aplicación
+      let appConfig = loadConfig();
+      let readLetters = loadJsonSet(READ_LETTERS_KEY);
+      let draftLetters = [];
+      let currentEditingLetterIndex = 0;
+      let toastTimeout = null;
+
+      // Estado de la Ruleta Canvas
+      let currentWheelAngle = 0;
+      let isWheelSpinning = false;
+      let lastWinningDate = '';
+
+      /**
+       * Carga la configuración desde el hash de la URL (#gift=...) o localStorage.
+       */
+      function loadConfig() {
+        const base = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+        try {
+          if (window.location.hash && window.location.hash.startsWith('#gift=')) {
+            const encoded = window.location.hash.slice(6);
+            const decodedJson = decodeURIComponent(escape(atob(encoded)));
+            const parsedHash = JSON.parse(decodedJson);
+            return mergeConfig(base, parsedHash);
+          }
+
+          const saved = localStorage.getItem(STORAGE_KEY);
+          if (saved) {
+            return mergeConfig(base, JSON.parse(saved));
+          }
+        } catch (err) {
+          console.warn('No se pudo leer la configuración guardada, usando valores por defecto:', err);
+        }
+        return base;
+      }
+
+      function mergeConfig(base, incoming) {
+        if (!incoming || typeof incoming !== 'object') return base;
+        const merged = { ...base, ...incoming };
+        if (Array.isArray(incoming.letters)) {
+          merged.letters = base.letters.map((defItem, idx) => ({
+            ...defItem,
+            ...(incoming.letters[idx] || {}),
+          }));
+        }
+        if (Array.isArray(incoming.rouletteOptions) && incoming.rouletteOptions.length === 8) {
+          merged.rouletteOptions = incoming.rouletteOptions.map((opt, idx) =>
+            String(opt || '').trim() || base.rouletteOptions[idx]
+          );
+        }
+        return merged;
+      }
+
+      function saveConfig() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(appConfig));
+        } catch (err) {
+          console.warn('Error al guardar en localStorage:', err);
+        }
+      }
+
+      function loadJsonSet(key) {
+        try {
+          const raw = localStorage.getItem(key);
+          return raw ? new Set(JSON.parse(raw)) : new Set();
+        } catch (e) {
+          return new Set();
+        }
+      }
+
+      function saveJsonSet(key, setObj) {
+        try {
+          localStorage.setItem(key, JSON.stringify(Array.from(setObj)));
+        } catch (e) {
+          console.warn('No se pudo guardar estado:', e);
+        }
+      }
+
+      /**
+       * Muestra una notificación tipo Toast suave (sin usar alert()).
+       */
+      function showToast(message) {
+        const banner = document.getElementById('toast-banner');
+        const text = document.getElementById('toast-message');
+        if (!banner || !text) return;
+
+        text.textContent = message;
+        banner.classList.remove('opacity-0', '-translate-y-4');
+        banner.classList.add('opacity-100', 'translate-y-0');
+
+        clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(() => {
+          banner.classList.remove('opacity-100', 'translate-y-0');
+          banner.classList.add('opacity-0', '-translate-y-4');
+        }, 2800);
+      }
+
+      /**
+       * Genera corazones flotantes sutiles en el fondo del Hero.
+       */
+      function initFloatingHearts() {
+        const container = document.getElementById('hero-hearts-container');
+        if (!container) return;
+        container.innerHTML = '';
+
+        const heartCount = 11;
+        for (let i = 0; i < heartCount; i++) {
+          const heart = document.createElement('div');
+          heart.className = 'floating-heart text-rosePrimary/30';
+          const left = Math.floor(Math.random() * 92) + 4;
+          const size = Math.floor(Math.random() * 12) + 10;
+          const duration = (Math.random() * 5 + 6).toFixed(1);
+          const delay = (Math.random() * 6).toFixed(1);
+
+          heart.style.left = `${left}%`;
+          heart.style.width = `${size}px`;
+          heart.style.height = `${size}px`;
+          heart.style.animationDuration = `${duration}s`;
+          heart.style.animationDelay = `${delay}s`;
+
+          heart.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" class="w-full h-full"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`;
+          container.appendChild(heart);
+        }
+      }
+
+      /**
+       * Convierte el string de fecha/hora (YYYY-MM-DDTHH:mm) a Date válido.
+       */
+      function parseStartDateTime(dateTimeStr) {
+        const raw = dateTimeStr || DEFAULT_CONFIG.startDateTime;
+        const [datePart, timePart] = raw.split('T');
+        const [year, month, day] = (datePart || '2026-01-15').split('-').map(Number);
+        const [hour, minute] = (timePart || '00:00').split(':').map(Number);
+        return new Date(year, (month || 1) - 1, day || 1, hour || 0, minute || 0, 0);
+      }
+
+      function formatSpanishDateTime(dateTimeStr) {
+        try {
+          const date = parseStartDateTime(dateTimeStr);
+          const formattedDate = date.toLocaleDateString('es-ES', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+          });
+          const formattedTime = date.toLocaleTimeString('es-ES', {
+            hour: '2-digit',
+            minute: '2-digit',
+          });
+          return `${formattedDate} (${formattedTime})`;
+        } catch (e) {
+          return dateTimeStr;
+        }
+      }
+
+      /**
+       * Actualiza el contador en vivo cada segundo.
+       */
+      function updateLiveCounter() {
+        const start = parseStartDateTime(appConfig.startDateTime);
+        const now = new Date();
+        const diffMs = Math.max(0, now.getTime() - start.getTime());
+
+        const totalSeconds = Math.floor(diffMs / 1000);
+        const days = Math.floor(totalSeconds / 86400);
+        const hours = Math.floor((totalSeconds % 86400) / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+
+        document.getElementById('count-days').textContent = days.toLocaleString('es-ES');
+        document.getElementById('count-hours').textContent = String(hours).padStart(2, '0');
+        document.getElementById('count-minutes').textContent = String(minutes).padStart(2, '0');
+        document.getElementById('count-seconds').textContent = String(seconds).padStart(2, '0');
+      }
+
+      /**
+       * Renderiza los 6 sobres interactivos de "Ábrelo cuando...".
+       */
+      function renderLettersGrid() {
+        const grid = document.getElementById('letters-grid');
+        if (!grid) return;
+
+        grid.innerHTML = appConfig.letters
+          .map((letter, idx) => {
+            const isRead = readLetters.has(letter.id);
+            const iconPath = LETTER_ICONS[letter.icon] || LETTER_ICONS.heart;
+            return `
+              <button
+                type="button"
+                data-letter-index="${idx}"
+                class="letter-card envelope-card group relative overflow-hidden flex flex-col justify-between rounded-2xl bg-white border border-goldAccent/30 p-4 pt-5 text-left shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-rosePrimary/50 hover:shadow-soft active:scale-[0.98] min-h-[142px]"
+              >
+                <div class="flex items-start justify-between w-full">
+                  <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-blush text-rosePrimary transition-transform duration-200 group-hover:scale-110">
+                    <svg class="h-5 w-5 fill-current" viewBox="0 0 24 24" aria-hidden="true">
+                      ${iconPath}
+                    </svg>
+                  </span>
+                  ${
+                    isRead
+                      ? '<span class="rounded-full bg-cream border border-goldAccent/40 px-2 py-0.5 text-[10px] font-semibold text-roseDark">Leída</span>'
+                      : '<span class="h-2.5 w-2.5 rounded-full bg-rosePrimary ring-4 ring-blush" title="Sobre cerrado"></span>'
+                  }
+                </div>
+
+                <div class="mt-3">
+                  <span class="block text-[10px] font-semibold uppercase tracking-wider text-goldAccent">
+                    ${letter.tag}
+                  </span>
+                  <h3 class="mt-0.5 font-serif text-sm sm:text-[15px] font-bold leading-snug text-slateInk group-hover:text-rosePrimary transition-colors">
+                    ${letter.title}
+                  </h3>
+                </div>
+              </button>
+            `;
+          })
+          .join('');
+
+        grid.querySelectorAll('.letter-card').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const index = Number(btn.getAttribute('data-letter-index'));
+            openLetterModal(index);
+          });
+        });
+      }
+
+      /**
+       * Abre el modal con el contenido de la carta seleccionada.
+       */
+      function openLetterModal(index) {
+        const letter = appConfig.letters[index];
+        if (!letter) return;
+
+        document.getElementById('modal-letter-title').textContent = letter.title;
+        document.getElementById('modal-letter-body').textContent = letter.message;
+        document.getElementById('modal-sender-name').textContent = appConfig.senderName;
+
+        const modal = document.getElementById('letter-modal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+
+        if (!readLetters.has(letter.id)) {
+          readLetters.add(letter.id);
+          saveJsonSet(READ_LETTERS_KEY, readLetters);
+          renderLettersGrid();
+        }
+      }
+
+      function closeLetterModal() {
+        const modal = document.getElementById('letter-modal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        document.body.style.overflow = '';
+      }
+
+      /**
+       * Divide una etiqueta larga de la ruleta en máximo 2 líneas legibles.
+       */
+      function wrapSliceLabel(text) {
+        const clean = String(text || '').trim();
+        if (clean.length <= 15) return [clean];
+        const words = clean.split(/\s+/);
+        if (words.length <= 1) return [clean];
+
+        const mid = Math.ceil(words.length / 2);
+        return [words.slice(0, mid).join(' '), words.slice(mid).join(' ')];
+      }
+
+      /**
+       * Ajusta el tamaño del Canvas de la ruleta con soporte Retina / devicePixelRatio.
+       */
+      function resizeRouletteCanvas() {
+        const canvas = document.getElementById('roulette-canvas');
+        const wrapper = document.getElementById('roulette-wrapper');
+        if (!canvas || !wrapper) return;
+
+        const size = Math.max(250, Math.floor(wrapper.clientWidth));
+        const dpr = Math.min(window.devicePixelRatio || 1, 3);
+
+        canvas.width = size * dpr;
+        canvas.height = size * dpr;
+        canvas.style.width = `${size}px`;
+        canvas.style.height = `${size}px`;
+
+        const ctx = canvas.getContext('2d');
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        drawRouletteWheel(currentWheelAngle);
+      }
+
+      /**
+       * Dibuja la Ruleta de Citas a Distancia en el Canvas circular de 8 gajos.
+       */
+      function drawRouletteWheel(rotationAngle) {
+        const canvas = document.getElementById('roulette-canvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        const size = parseFloat(canvas.style.width) || 320;
+        const center = size / 2;
+        const outerRadius = center - 6;
+        const options = appConfig.rouletteOptions;
+        const numSlices = options.length;
+        const sliceAngle = (Math.PI * 2) / numSlices;
+
+        ctx.clearRect(0, 0, size, size);
+
+        // Aro exterior dorado decorativo
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(center, center, outerRadius + 4, 0, Math.PI * 2);
+        ctx.fillStyle = '#D4A373';
+        ctx.fill();
+        ctx.restore();
+
+        // Dibujar cada uno de los 8 gajos
+        for (let i = 0; i < numSlices; i++) {
+          const startAngle = rotationAngle + i * sliceAngle;
+          const endAngle = startAngle + sliceAngle;
+
+          ctx.save();
+          ctx.beginPath();
+          ctx.moveTo(center, center);
+          ctx.arc(center, center, outerRadius, startAngle, endAngle);
+          ctx.closePath();
+
+          ctx.fillStyle = WHEEL_SLICE_COLORS[i % WHEEL_SLICE_COLORS.length];
+          ctx.fill();
+
+          ctx.lineWidth = 1.5;
+          ctx.strokeStyle = 'rgba(212, 163, 115, 0.65)';
+          ctx.stroke();
+
+          // Texto radial centrado dentro del gajo
+          const midAngle = startAngle + sliceAngle / 2;
+          ctx.translate(center, center);
+          ctx.rotate(midAngle);
+
+          ctx.fillStyle = '#4A1D29';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          const fontSize = size < 300 ? 10.5 : 11.5;
+          ctx.font = `600 ${fontSize}px "Plus Jakarta Sans", sans-serif`;
+
+          const lines = wrapSliceLabel(options[i]);
+          const textRadius = outerRadius * 0.63;
+
+          if (lines.length === 1) {
+            ctx.fillText(lines[0], textRadius, 0, outerRadius * 0.56);
+          } else {
+            ctx.fillText(lines[0], textRadius, -7, outerRadius * 0.56);
+            ctx.fillText(lines[1], textRadius, 7, outerRadius * 0.56);
+          }
+
+          ctx.restore();
+        }
+
+        // Pequeños remaches dorados en el borde de cada división
+        for (let i = 0; i < numSlices; i++) {
+          const pinAngle = rotationAngle + i * sliceAngle;
+          const pinX = center + Math.cos(pinAngle) * (outerRadius - 4);
+          const pinY = center + Math.sin(pinAngle) * (outerRadius - 4);
+
+          ctx.beginPath();
+          ctx.arc(pinX, pinY, 2.5, 0, Math.PI * 2);
+          ctx.fillStyle = '#7A2E41';
+          ctx.fill();
+        }
+      }
+
+      /**
+       * Curva de desaceleración suave estilo cubic-bezier(0.14, 0.86, 0.22, 1)
+       */
+      function easeOutCubicBezier(t) {
+        return 1 - Math.pow(1 - t, 4);
+      }
+
+      /**
+       * Devuelve una descripción romántica con idea de cómo realizar la cita ganadora.
+       */
+      function getDateIdeaDescription(dateTitle) {
+        if (DEFAULT_DATE_IDEAS[dateTitle]) {
+          return DEFAULT_DATE_IDEAS[dateTitle];
+        }
+        return `Preparen todo para disfrutar juntos de "${dateTitle}" en videollamada, sin prisas y dedicándose este momento solo para ustedes dos.`;
+      }
+
+      /**
+       * Inicia el giro de 4.5 segundos de la ruleta y muestra la cita elegida al detenerse.
+       */
+      function spinRouletteWheel() {
+        if (isWheelSpinning) return;
+        isWheelSpinning = true;
+
+        const spinBtn = document.getElementById('spin-roulette-btn');
+        const resultCard = document.getElementById('roulette-result-card');
+        if (spinBtn) {
+          spinBtn.disabled = true;
+          spinBtn.textContent = '...';
+        }
+        if (resultCard) {
+          resultCard.classList.add('hidden');
+        }
+
+        const numSlices = appConfig.rouletteOptions.length;
+        const sliceAngle = (Math.PI * 2) / numSlices;
+        const pointerAngle = -Math.PI / 2; // Puntero arriba (12 en punto)
+
+        // Elegir un gajo ganador aleatorio y caer en su zona central
+        const targetIndex = Math.floor(Math.random() * numSlices);
+        const safeOffset = (0.25 + Math.random() * 0.5) * sliceAngle;
+        const desiredNormalizedAngle =
+          (((pointerAngle - (targetIndex * sliceAngle + safeOffset)) % (Math.PI * 2)) + Math.PI * 2) %
+          (Math.PI * 2);
+
+        const currentNormalized =
+          ((currentWheelAngle % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
+        let deltaForward = desiredNormalizedAngle - currentNormalized;
+        if (deltaForward <= 0) deltaForward += Math.PI * 2;
+
+        // 6 vueltas completas + desplazamiento exacto al gajo ganador
+        const totalRotation = Math.PI * 2 * 6 + deltaForward;
+        const startAngle = currentWheelAngle;
+        const duration = 4500; // 4.5 segundos exactos
+        const startTime = performance.now();
+
+        function animateFrame(now) {
+          const elapsed = now - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          const eased = easeOutCubicBezier(progress);
+
+          currentWheelAngle = startAngle + totalRotation * eased;
+          drawRouletteWheel(currentWheelAngle);
+
+          if (progress < 1) {
+            requestAnimationFrame(animateFrame);
+          } else {
+            currentWheelAngle = (startAngle + totalRotation) % (Math.PI * 2);
+            drawRouletteWheel(currentWheelAngle);
+            isWheelSpinning = false;
+
+            if (spinBtn) {
+              spinBtn.disabled = false;
+              spinBtn.textContent = '¡GIRAR!';
+            }
+
+            // Verificar exactamente qué gajo quedó debajo del puntero superior
+            const relAngle =
+              (((pointerAngle - currentWheelAngle) % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
+            const finalIndex = Math.floor(relAngle / sliceAngle) % numSlices;
+            const winningOption = appConfig.rouletteOptions[finalIndex];
+
+            onRouletteFinished(winningOption);
+          }
+        }
+
+        requestAnimationFrame(animateFrame);
+      }
+
+      /**
+       * Muestra la tarjeta de resultado y lanza la lluvia de corazones al terminar el giro.
+       */
+      function onRouletteFinished(winningOption) {
+        lastWinningDate = winningOption;
+
+        const titleEl = document.getElementById('winner-date-title');
+        const descEl = document.getElementById('winner-date-description');
+        const resultCard = document.getElementById('roulette-result-card');
+        const wrapper = document.getElementById('roulette-wrapper');
+
+        if (titleEl) titleEl.textContent = winningOption;
+        if (descEl) descEl.textContent = getDateIdeaDescription(winningOption);
+        if (resultCard) {
+          resultCard.classList.remove('hidden');
+          resultCard.classList.remove('winner-card-reveal');
+          void resultCard.offsetWidth;
+          resultCard.classList.add('winner-card-reveal');
+        }
+
+        if (wrapper) {
+          const rect = wrapper.getBoundingClientRect();
+          triggerCelebrationBurst(rect.left + rect.width / 2, rect.top + rect.height / 2);
+        }
+      }
+
+      /**
+       * Copia texto al portapapeles de forma segura (compatible con iframes).
+       */
+      function copyTextSafely(textToCopy, successMsg) {
+        try {
+          const helper = document.createElement('textarea');
+          helper.value = textToCopy;
+          helper.style.position = 'fixed';
+          helper.style.opacity = '0';
+          document.body.appendChild(helper);
+          helper.select();
+          document.execCommand('copy');
+          document.body.removeChild(helper);
+          showToast(successMsg);
+        } catch (err) {
+          showToast('No se pudo copiar el texto');
+        }
+      }
+
+      /**
+       * Crea una explosión visual de corazones y confeti desde un punto dado.
+       */
+      function triggerCelebrationBurst(x, y) {
+        const symbols = ['♥', '✨', '💖', '🌸', '♥'];
+        const colors = ['#B84A62', '#7A2E41', '#D4A373', '#E07A5F', '#B84A62'];
+        const count = 24;
+
+        for (let i = 0; i < count; i++) {
+          const el = document.createElement('span');
+          el.className = 'burst-particle text-base font-bold select-none';
+          el.textContent = symbols[i % symbols.length];
+          el.style.color = colors[i % colors.length];
+          el.style.left = `${x}px`;
+          el.style.top = `${y}px`;
+
+          const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.4;
+          const distance = 70 + Math.random() * 100;
+          const tx = Math.cos(angle) * distance;
+          const ty = Math.sin(angle) * distance - 30;
+          const rot = (Math.random() - 0.5) * 360;
+
+          el.style.setProperty('--tx', `${tx}px`);
+          el.style.setProperty('--ty', `${ty}px`);
+          el.style.setProperty('--rot', `${rot}deg`);
+
+          document.body.appendChild(el);
+          setTimeout(() => el.remove(), 1000);
+        }
+      }
+
+      /**
+       * Actualiza toda la interfaz con los datos actuales de appConfig.
+       */
+      function renderAll() {
+        document.getElementById('display-couple-names').textContent = appConfig.coupleNames;
+        document.getElementById('footer-couple-names').textContent = appConfig.coupleNames;
+        document.getElementById('display-hero-title').textContent = appConfig.heroTitle;
+        document.getElementById('display-start-date-label').textContent =
+          `Desde el ${formatSpanishDateTime(appConfig.startDateTime)} — y sumando recuerdos`;
+
+        document.getElementById('display-song-title').textContent = appConfig.songTitle;
+        document.getElementById('display-song-artist').textContent = appConfig.songArtist;
+        document.getElementById('display-song-lyric').textContent = appConfig.songLyric;
+
+        const songLink = document.getElementById('display-song-link');
+        songLink.href = appConfig.songUrl || 'https://open.spotify.com';
+
+        updateLiveCounter();
+        renderLettersGrid();
+        resizeRouletteCanvas();
+      }
+
+      /**
+       * Control del disco de vinilo giratorio.
+       */
+      function initVinylPlayer() {
+        const btn = document.getElementById('vinyl-toggle-btn');
+        const disc = document.getElementById('vinyl-svg');
+        const pill = document.getElementById('vinyl-status-pill');
+        let isPlaying = false;
+
+        btn.addEventListener('click', () => {
+          isPlaying = !isPlaying;
+          if (isPlaying) {
+            disc.classList.add('is-playing');
+            pill.textContent = 'Girando ♪';
+          } else {
+            disc.classList.remove('is-playing');
+            pill.textContent = 'Pausado';
+          }
+        });
+      }
+
+      /**
+       * Inicializa eventos de la Ruleta de Citas a Distancia.
+       */
+      function initRoulette() {
+        const spinBtn = document.getElementById('spin-roulette-btn');
+        const spinAgainBtn = document.getElementById('spin-again-btn');
+        const copyPlanBtn = document.getElementById('copy-date-plan-btn');
+
+        if (spinBtn) {
+          spinBtn.addEventListener('click', spinRouletteWheel);
+        }
+        if (spinAgainBtn) {
+          spinAgainBtn.addEventListener('click', spinRouletteWheel);
+        }
+        if (copyPlanBtn) {
+          copyPlanBtn.addEventListener('click', () => {
+            if (!lastWinningDate) return;
+            const message = `¡La ruleta decidió nuestra próxima cita: ${lastWinningDate}! ¿Cuándo la hacemos? 💕`;
+            copyTextSafely(message, '¡Plan copiado! Listo para enviarlo por WhatsApp 💕');
+          });
+        }
+
+        resizeRouletteCanvas();
+        window.addEventListener('resize', resizeRouletteCanvas);
+      }
+
+      /**
+       * Gestión del Drawer/Modal de Personalización ("⚙️ Personalizar").
+       */
+      function initCustomizer() {
+        const modal = document.getElementById('customizer-modal');
+        const openBtn = document.getElementById('open-customizer-btn');
+        const closeBtn = document.getElementById('close-customizer-btn');
+        const form = document.getElementById('customizer-form');
+        const letterSelect = document.getElementById('select-letter-edit');
+        const letterTextarea = document.getElementById('textarea-letter-edit');
+        const rouletteInputsContainer = document.getElementById('roulette-inputs-container');
+        const copyLinkBtn = document.getElementById('copy-share-link-btn');
+        const restoreDefaultsBtn = document.getElementById('restore-defaults-btn');
+
+        function populateForm() {
+          document.getElementById('input-couple-names').value = appConfig.coupleNames;
+          document.getElementById('input-hero-title').value = appConfig.heroTitle;
+          document.getElementById('input-sender-name').value = appConfig.senderName;
+          document.getElementById('input-start-datetime').value = appConfig.startDateTime;
+          document.getElementById('input-song-title').value = appConfig.songTitle;
+          document.getElementById('input-song-artist').value = appConfig.songArtist;
+          document.getElementById('input-song-lyric').value = appConfig.songLyric;
+          document.getElementById('input-song-url').value = appConfig.songUrl;
+
+          // Rellenar los 8 campos de la ruleta
+          rouletteInputsContainer.innerHTML = appConfig.rouletteOptions
+            .map(
+              (opt, idx) => `
+              <div>
+                <label for="input-roulette-opt-${idx}" class="sr-only">Opción ${idx + 1}</label>
+                <input
+                  id="input-roulette-opt-${idx}"
+                  type="text"
+                  value="${opt.replace(/"/g, '&quot;')}"
+                  placeholder="Cita ${idx + 1}"
+                  class="roulette-opt-input w-full rounded-xl border border-slateInk/15 bg-white px-3 py-2 text-xs text-slateInk focus:border-rosePrimary focus:outline-none"
+                />
+              </div>
+            `
+            )
+            .join('');
+
+          draftLetters = JSON.parse(JSON.stringify(appConfig.letters));
+          currentEditingLetterIndex = 0;
+
+          letterSelect.innerHTML = draftLetters
+            .map((l, i) => `<option value="${i}">${i + 1}. ${l.title}</option>`)
+            .join('');
+          letterTextarea.value = draftLetters[0].message;
+        }
+
+        function collectDraftConfig() {
+          draftLetters[currentEditingLetterIndex].message = letterTextarea.value;
+          const optionInputs = Array.from(document.querySelectorAll('.roulette-opt-input'));
+          const updatedOptions = optionInputs.map(
+            (inp, idx) => inp.value.trim() || DEFAULT_CONFIG.rouletteOptions[idx]
+          );
+
+          return {
+            coupleNames:
+              document.getElementById('input-couple-names').value.trim() || DEFAULT_CONFIG.coupleNames,
+            heroTitle:
+              document.getElementById('input-hero-title').value.trim() || DEFAULT_CONFIG.heroTitle,
+            senderName:
+              document.getElementById('input-sender-name').value.trim() || DEFAULT_CONFIG.senderName,
+            startDateTime:
+              document.getElementById('input-start-datetime').value || DEFAULT_CONFIG.startDateTime,
+            songTitle:
+              document.getElementById('input-song-title').value.trim() || DEFAULT_CONFIG.songTitle,
+            songArtist:
+              document.getElementById('input-song-artist').value.trim() || DEFAULT_CONFIG.songArtist,
+            songLyric:
+              document.getElementById('input-song-lyric').value.trim() || DEFAULT_CONFIG.songLyric,
+            songUrl:
+              document.getElementById('input-song-url').value.trim() || DEFAULT_CONFIG.songUrl,
+            rouletteOptions: updatedOptions,
+            letters: draftLetters,
+          };
+        }
+
+        openBtn.addEventListener('click', () => {
+          populateForm();
+          modal.classList.remove('hidden');
+          modal.classList.add('flex');
+          document.body.style.overflow = 'hidden';
+        });
+
+        function closeModal() {
+          modal.classList.add('hidden');
+          modal.classList.remove('flex');
+          document.body.style.overflow = '';
+        }
+
+        closeBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) closeModal();
+        });
+
+        letterSelect.addEventListener('change', (e) => {
+          draftLetters[currentEditingLetterIndex].message = letterTextarea.value;
+          currentEditingLetterIndex = Number(e.target.value);
+          letterTextarea.value = draftLetters[currentEditingLetterIndex].message;
+        });
+
+        letterTextarea.addEventListener('input', () => {
+          draftLetters[currentEditingLetterIndex].message = letterTextarea.value;
+        });
+
+        // Guardar cambios en localStorage y actualizar al instante
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          appConfig = collectDraftConfig();
+          saveConfig();
+          renderAll();
+          closeModal();
+          showToast('¡Cambios guardados con amor! ♥');
+        });
+
+        // Copiar enlace personalizado codificado en el hash (#gift=...)
+        copyLinkBtn.addEventListener('click', () => {
+          const tempConfig = collectDraftConfig();
+          try {
+            const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(tempConfig))));
+            const baseUrl = window.location.href.split('#')[0];
+            const shareUrl = `${baseUrl}#gift=${encoded}`;
+            copyTextSafely(shareUrl, 'Enlace personalizado copiado al portapapeles 🔗');
+          } catch (err) {
+            showToast('No se pudo generar el enlace');
+          }
+        });
+
+        // Restaurar valores originales
+        restoreDefaultsBtn.addEventListener('click', () => {
+          appConfig = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+          saveConfig();
+          if (window.location.hash) {
+            history.replaceState(null, '', window.location.pathname + window.location.search);
+          }
+          populateForm();
+          renderAll();
+          showToast('Valores originales restaurados');
+        });
+      }
+
+      // Inicialización al cargar el DOM
+      document.addEventListener('DOMContentLoaded', () => {
+        initFloatingHearts();
+        renderAll();
+        initRoulette();
+        initVinylPlayer();
+        initCustomizer();
+
+        setInterval(updateLiveCounter, 1000);
+
+        const letterModal = document.getElementById('letter-modal');
+        document.getElementById('close-letter-btn').addEventListener('click', closeLetterModal);
+        letterModal.addEventListener('click', (e) => {
+          if (e.target === letterModal) closeLetterModal();
+        });
+
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') {
+            closeLetterModal();
+            const customizer = document.getElementById('customizer-modal');
+            if (!customizer.classList.contains('hidden')) {
+              customizer.classList.add('hidden');
+              customizer.classList.remove('flex');
+              document.body.style.overflow = '';
+            }
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
